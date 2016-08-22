@@ -61,7 +61,7 @@ export class MyDepdendentClass {
     }
 }
 
-// Create an instance of MyDependentClass that is given a new or existing IMyService implementation.
+// Create an instance of myDependentClass
 const myDependentClass = instantiationService.createInstance(MyDepdendentClass);
 myDependentClass.makeMyServiceSayHello();
 ```
