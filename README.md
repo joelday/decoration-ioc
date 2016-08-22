@@ -1,10 +1,10 @@
 # The instantiation system used in Visual Studio Code
-vscode-instantiation is a TypeScript IoC framework that provides service location and constructor injection with automatic dependency resolution.
+decoration-ioc is a TypeScript inversion of control and dependency injection framework. Based on the system used in Visual Studio Code, decoration-ioc provides service location and constructor injection with automatic dependency resolution.
 
 This package is based on source from [Microsoft/vscode](https://github.com/Microsoft/vscode) with minor modifications.
 
 # Quickstart
-The "experimentalDecorators" compiler option must be set to true.
+The ```experimentalDecorators``` TypeScript compiler option must be set to ```true```.
 
 ## Define a service interface
 
@@ -67,4 +67,4 @@ myDependentClass.makeMyServiceSayHello();
 ```
 
 ## Notes
-- vscode-instantiation does not currently support asynchronous instantiation.
+- decoration-ioc does not currently support asynchronous instantiation.

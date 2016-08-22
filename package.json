@@ -1,7 +1,7 @@
 {
-  "name": "vscode-instantiation",
+  "name": "decoration-ioc",
   "version": "1.0.0",
-  "description": "A TypeScript dependency injection framework",
+  "description": "A TypeScript inversion of control and dependency injection framework",
   "main": "lib/index.js",
   "files": [
     "lib"
@@ -17,14 +17,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joelday/vscode-instantiation.git"
+    "url": "git+https://github.com/joelday/decoration-ioc.git"
   },
-  "author": "Joel Day",
+  "author": {
+    "name": "Joel Day",
+    "email": "joelday@gmail.com",
+    "url": "https://github.com/joelday"
+  },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/joelday/vscode-instantiation/issues"
+    "url": "https://github.com/joelday/decoration-ioc/issues"
   },
-  "homepage": "https://github.com/joelday/vscode-instantiation#readme",
+  "homepage": "https://github.com/joelday/decoration-ioc#readme",
   "keywords": [
     "ioc",
     "inversion of control",
