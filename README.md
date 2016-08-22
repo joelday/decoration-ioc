@@ -1,5 +1,7 @@
-# Visual Studio Code instantiation system
-Extracted from [Microsoft/vscode](https://github.com/Microsoft/vscode), vscode-instantiation is a TypeScript IoC framework that provides service location and constructor injection with automatic dependency resolution.
+# The instantiation system used in Visual Studio Code
+vscode-instantiation is a TypeScript IoC framework that provides service location and constructor injection with automatic dependency resolution.
+
+This package is based on source from [Microsoft/vscode](https://github.com/Microsoft/vscode) with minor modifications.
 
 # Quickstart
 The "experimentalDecorators" compiler option must be set to true.
@@ -62,7 +64,6 @@ export class MyDepdendentClass {
 // Create an instance of MyDependentClass that is given a new or existing IMyService implementation.
 const myDependentClass = instantiationService.createInstance(MyDepdendentClass);
 myDependentClass.makeMyServiceSayHello();
-
 ```
 
 ## Notes

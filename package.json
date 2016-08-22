@@ -1,7 +1,7 @@
 {
   "name": "vscode-instantiation",
   "version": "1.0.0",
-  "description": "VSCode's instantiation system",
+  "description": "A TypeScript IoC/DI framework.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
