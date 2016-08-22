@@ -1,11 +1,14 @@
 {
   "name": "vscode-instantiation",
   "version": "1.0.0",
-  "description": "A TypeScript IoC/DI framework.",
+  "description": "A TypeScript IoC/DI framework",
   "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "typings": "lib/index.d.ts",
   "scripts": {
-    "clean": "del lib",
+    "clean": "node ./node_modules/del/index.js lib",
     "compile": "tsc",
     "prepublish": "npm run clean && npm run compile"
   },
@@ -21,5 +24,12 @@
   "bugs": {
     "url": "https://github.com/joelday/vscode-instantiation/issues"
   },
-  "homepage": "https://github.com/joelday/vscode-instantiation#readme"
+  "homepage": "https://github.com/joelday/vscode-instantiation#readme",
+  "keywords": [
+    "ioc",
+    "inversion of control",
+    "di",
+    "dependency injection",
+    "typescript"
+  ]
 }
