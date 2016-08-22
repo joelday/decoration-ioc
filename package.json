@@ -1,17 +1,23 @@
 {
   "name": "vscode-instantiation",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "VSCode's instantiation system",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "del lib",
+    "compile": "tsc",
+    "prepublish": "npm run clean && npm run compile"
+  },
+  "devDependencies": {
+    "del": "^2.2.2"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/joelday/vscode-instantiation.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Joel Day",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/joelday/vscode-instantiation/issues"
   },
