@@ -62,7 +62,7 @@ export class MyDepdendentClass {
 }
 
 // Create an instance of myDependentClass
-const myDependentClass = instantiationService.createInstance(MyDepdendentClass);
+const myDependentClass = instantiationService.createInstance(MyDependentClass);
 myDependentClass.makeMyServiceSayHello();
 ```
 
