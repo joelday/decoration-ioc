@@ -1,7 +1,7 @@
 {
   "name": "vscode-instantiation",
   "version": "1.0.0",
-  "description": "A TypeScript IoC/DI framework",
+  "description": "A TypeScript dependency injection framework",
   "main": "lib/index.js",
   "files": [
     "lib"
@@ -30,6 +30,7 @@
     "inversion of control",
     "di",
     "dependency injection",
+    "service locator",
     "typescript"
   ]
 }
