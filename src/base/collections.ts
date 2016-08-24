@@ -10,7 +10,7 @@
  * acts a dictionary. The keys are strings.
  */
 export interface IStringDictionary<V> {
-	[name: string]: V;
+    [name: string]: V;
 }
 
 /**
@@ -18,15 +18,15 @@ export interface IStringDictionary<V> {
  * acts a dictionary. The keys are numbers.
  */
 export interface INumberDictionary<V> {
-	[idx: number]: V;
+    [idx: number]: V;
 }
 
 export function createStringDictionary<V>(): IStringDictionary<V> {
-	return Object.create(null);
+    return Object.create(null);
 }
 
 export function createNumberDictionary<V>(): INumberDictionary<V> {
-	return Object.create(null);
+    return Object.create(null);
 }
 
 /**
@@ -35,16 +35,16 @@ export function createNumberDictionary<V>(): INumberDictionary<V> {
  * @param what The key.
  * @param from A native JavaScript object that stores items.
  * @param alternate A default value this is return in case an item with
- * 	the key isn't found.
+ *     the key isn't found.
  */
 export function lookup<T>(from: IStringDictionary<T>, what: string, alternate?: T): T;
 export function lookup<T>(from: INumberDictionary<T>, what: number, alternate?: T): T;
 export function lookup<T>(from: any, what: any, alternate: T = null): T {
-	const key = String(what);
-	if (contains(from, key)) {
-		return from[key];
-	}
-	return alternate;
+    const key = String(what);
+    if (contains(from, key)) {
+        return from[key];
+    }
+    return alternate;
 }
 
 
@@ -57,16 +57,16 @@ export function lookupOrInsert<T>(from: IStringDictionary<T>, key: string, alter
 export function lookupOrInsert<T>(from: INumberDictionary<T>, key: number, alternate: T): T;
 export function lookupOrInsert<T>(from: INumberDictionary<T>, key: number, alternateFn: () => T): T;
 export function lookupOrInsert<T>(from: any, stringOrNumber: any, alternate: any): T {
-	const key = String(stringOrNumber);
-	if (contains(from, key)) {
-		return from[key];
-	} else {
-		if (typeof alternate === 'function') {
-			alternate = alternate();
-		}
-		from[key] = alternate;
-		return alternate;
-	}
+    const key = String(stringOrNumber);
+    if (contains(from, key)) {
+        return from[key];
+    } else {
+        if (typeof alternate === 'function') {
+            alternate = alternate();
+        }
+        from[key] = alternate;
+        return alternate;
+    }
 }
 
 /**
@@ -75,7 +75,7 @@ export function lookupOrInsert<T>(from: any, stringOrNumber: any, alternate: any
 export function insert<T>(into: IStringDictionary<T>, data: T, hashFn: (data: T) => string): void;
 export function insert<T>(into: INumberDictionary<T>, data: T, hashFn: (data: T) => string): void;
 export function insert<T>(into: any, data: T, hashFn: (data: T) => string): void {
-	into[hashFn(data)] = data;
+    into[hashFn(data)] = data;
 }
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -87,7 +87,7 @@ const hasOwnProperty = Object.prototype.hasOwnProperty;
 export function contains<T>(from: IStringDictionary<T>, what: string): boolean;
 export function contains<T>(from: INumberDictionary<T>, what: number): boolean;
 export function contains<T>(from: any, what: any): boolean {
-	return hasOwnProperty.call(from, what);
+    return hasOwnProperty.call(from, what);
 }
 
 /**
@@ -97,13 +97,13 @@ export function contains<T>(from: any, what: any): boolean {
 export function values<T>(from: IStringDictionary<T>): T[];
 export function values<T>(from: INumberDictionary<T>): T[];
 export function values<T>(from: any): any[] {
-	const result: T[] = [];
-	for (var key in from) {
-		if (hasOwnProperty.call(from, key)) {
-			result.push(from[key]);
-		}
-	}
-	return result;
+    const result: T[] = [];
+    for (var key in from) {
+        if (hasOwnProperty.call(from, key)) {
+            result.push(from[key]);
+        }
+    }
+    return result;
 }
 
 /**
@@ -113,16 +113,16 @@ export function values<T>(from: any): any[] {
 export function forEach<T>(from: IStringDictionary<T>, callback: (entry: { key: string; value: T; }, remove: Function) => any): void;
 export function forEach<T>(from: INumberDictionary<T>, callback: (entry: { key: number; value: T; }, remove: Function) => any): void;
 export function forEach<T>(from: any, callback: (entry: { key: any; value: T; }, remove: Function) => any): void {
-	for (var key in from) {
-		if (hasOwnProperty.call(from, key)) {
-			const result = callback({ key: key, value: from[key] }, function() {
-				delete from[key];
-			});
-			if (result === false) {
-				return;
-			}
-		}
-	}
+    for (var key in from) {
+        if (hasOwnProperty.call(from, key)) {
+            const result = callback({ key: key, value: from[key] }, function() {
+                delete from[key];
+            });
+            if (result === false) {
+                return;
+            }
+        }
+    }
 }
 
 /**
@@ -132,11 +132,11 @@ export function forEach<T>(from: any, callback: (entry: { key: any; value: T; },
 export function remove<T>(from: IStringDictionary<T>, key: string): boolean;
 export function remove<T>(from: INumberDictionary<T>, key: string): boolean;
 export function remove<T>(from: any, key: string): boolean {
-	if (!hasOwnProperty.call(from, key)) {
-		return false;
-	}
-	delete from[key];
-	return true;
+    if (!hasOwnProperty.call(from, key)) {
+        return false;
+    }
+    delete from[key];
+    return true;
 }
 
 /**
@@ -144,7 +144,7 @@ export function remove<T>(from: any, key: string): boolean {
  * group function.
  */
 export function groupBy<T>(data: T[], groupFn: (element: T) => string): IStringDictionary<T[]> {
-	const result = createStringDictionary<T[]>();
-	data.forEach(element => lookupOrInsert(result, groupFn(element), []).push(element));
-	return result;
+    const result = createStringDictionary<T[]>();
+    data.forEach(element => lookupOrInsert(result, groupFn(element), []).push(element));
+    return result;
 }
