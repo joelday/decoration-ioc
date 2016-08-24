@@ -48,7 +48,7 @@ serviceCollection.set(IMyService, new Descriptor(MyService));
 const instantiationService: IInstantiationService = new InstantiationService(serviceCollection);
 
 // This is a class that requires an instance of IMyService when created
-export class MyDepdendentClass {
+export class MyDependentClass {
     private _myService: IMyService;
 
     // The myService parameter is annotated with the IMyService decorator
