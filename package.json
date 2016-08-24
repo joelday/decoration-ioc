@@ -1,6 +1,6 @@
 {
   "name": "decoration-ioc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A TypeScript inversion of control and dependency injection framework",
   "main": "lib/index.js",
   "files": [

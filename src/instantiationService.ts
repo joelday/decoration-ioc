@@ -6,7 +6,7 @@
 
 import {create} from './base/types';
 import {Graph} from './base/graph';
-import {Descriptor, AsyncDescriptor} from './descriptors';
+import {Descriptor} from './descriptors';
 import {ServiceIdentifier, IInstantiationService, ServicesAccessor, _util, optional} from './instantiation';
 import {ServiceCollection} from './serviceCollection';
 

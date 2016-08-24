@@ -107,15 +107,15 @@ export interface IInstantiationService {
 	 * Synchronously creates an instance that is denoted by
 	 * the descriptor
 	 */
-	createInstance<T>(descriptor: descriptors.SyncDescriptor0<T>): T;
-	createInstance<A1, T>(descriptor: descriptors.SyncDescriptor1<A1, T>, a1: A1): T;
-	createInstance<A1, A2, T>(descriptor: descriptors.SyncDescriptor2<A1, A2, T>, a1: A1, a2: A2): T;
-	createInstance<A1, A2, A3, T>(descriptor: descriptors.SyncDescriptor3<A1, A2, A3, T>, a1: A1, a2: A2, a3: A3): T;
-	createInstance<A1, A2, A3, A4, T>(descriptor: descriptors.SyncDescriptor4<A1, A2, A3, A4, T>, a1: A1, a2: A2, a3: A3, a4: A4): T;
-	createInstance<A1, A2, A3, A4, A5, T>(descriptor: descriptors.SyncDescriptor5<A1, A2, A3, A4, A5, T>, a1: A1, a2: A2, a3: A3, a4: A4, a5: A5): T;
-	createInstance<A1, A2, A3, A4, A5, A6, T>(descriptor: descriptors.SyncDescriptor6<A1, A2, A3, A4, A5, A6, T>, a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6): T;
-	createInstance<A1, A2, A3, A4, A5, A6, A7, T>(descriptor: descriptors.SyncDescriptor7<A1, A2, A3, A4, A5, A6, A7, T>, a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7): T;
-	createInstance<A1, A2, A3, A4, A5, A6, A7, A8, T>(descriptor: descriptors.SyncDescriptor8<A1, A2, A3, A4, A5, A6, A7, A8, T>, a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7, a8: A8): T;
+	createInstance<T>(descriptor: descriptors.Descriptor0<T>): T;
+	createInstance<A1, T>(descriptor: descriptors.Descriptor1<A1, T>, a1: A1): T;
+	createInstance<A1, A2, T>(descriptor: descriptors.Descriptor2<A1, A2, T>, a1: A1, a2: A2): T;
+	createInstance<A1, A2, A3, T>(descriptor: descriptors.Descriptor3<A1, A2, A3, T>, a1: A1, a2: A2, a3: A3): T;
+	createInstance<A1, A2, A3, A4, T>(descriptor: descriptors.Descriptor4<A1, A2, A3, A4, T>, a1: A1, a2: A2, a3: A3, a4: A4): T;
+	createInstance<A1, A2, A3, A4, A5, T>(descriptor: descriptors.Descriptor5<A1, A2, A3, A4, A5, T>, a1: A1, a2: A2, a3: A3, a4: A4, a5: A5): T;
+	createInstance<A1, A2, A3, A4, A5, A6, T>(descriptor: descriptors.Descriptor6<A1, A2, A3, A4, A5, A6, T>, a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6): T;
+	createInstance<A1, A2, A3, A4, A5, A6, A7, T>(descriptor: descriptors.Descriptor7<A1, A2, A3, A4, A5, A6, A7, T>, a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7): T;
+	createInstance<A1, A2, A3, A4, A5, A6, A7, A8, T>(descriptor: descriptors.Descriptor8<A1, A2, A3, A4, A5, A6, A7, A8, T>, a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7, a8: A8): T;
 
 	createInstance<T>(ctor: IConstructorSignature0<T>): T;
 	createInstance<A1, T>(ctor: IConstructorSignature1<A1, T>, first: A1): T;
