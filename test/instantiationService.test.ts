@@ -57,8 +57,6 @@ let IDependentService = createDecorator<IDependentService>("dependentService");
 interface IDependentService {
     _serviceBrand: any;
     name: string;
-
-    service2: IService2;
 }
 
 class DependentService implements IDependentService {
@@ -74,17 +72,56 @@ class DependentService implements IDependentService {
     name = "farboo";
 }
 
-class Service1Consumer {
+interface IPropertyDependentService {
+    service1: IService1;
+    service2: IService2;
+}
 
-    constructor( @IService1 service1: IService1) {
+class PropDepService implements IPropertyDependentService {
+    _serviceBrand: any;
+
+    private _service1: IService1;
+
+    @IService1
+    get service1() {
+        return this._service1;
+    }
+
+    set service1(service: IService1) {
+        this._service1 = service;
+    }
+
+    @IService2
+    service2: IService2;
+}
+
+class OptionalPropDepService implements IPropertyDependentService {
+    _serviceBrand: any;
+
+    private _service1: IService1;
+
+    @optional(IService1)
+    get service1() {
+        return this._service1;
+    }
+
+    set service1(service: IService1) {
+        this._service1 = service;
+    }
+
+    @optional(IService2)
+    service2: IService2;
+}
+
+class Service1Consumer {
+    constructor(@IService1 service1: IService1) {
         assert.ok(service1);
         assert.equal(service1.c, 1);
     }
 }
 
 class Target2Dep {
-
-    constructor( @IService1 service1: IService1, @IService2 service2) {
+    constructor(@IService1 service1: IService1, @IService2 service2) {
         assert.ok(service1 instanceof Service1);
         assert.ok(service2 instanceof Service2);
     }
@@ -99,12 +136,12 @@ class TargetWithStaticParam {
 }
 
 class TargetNotOptional {
-    constructor( @IService1 service1: IService1, @IService2 service2: IService2) {
+    constructor(@IService1 service1: IService1, @IService2 service2: IService2) {
 
     }
 }
 class TargetOptional {
-    constructor( @IService1 service1: IService1, @optional(IService2) service2: IService2) {
+    constructor(@IService1 service1: IService1, @optional(IService2) service2: IService2) {
         assert.ok(service1);
         assert.equal(service1.c, 1);
         assert.ok(service2 === void 0);
@@ -112,17 +149,16 @@ class TargetOptional {
 }
 
 class DependentServiceTarget {
-    constructor( @IDependentService d) {
+    constructor(@IDependentService d) {
         assert.ok(d);
         assert.equal(d.name, "farboo");
     }
 }
 
 class DependentServiceTarget2 {
-    constructor( @IDependentService d: IDependentService, @IService1 s: IService1) {
+    constructor(@IDependentService d: IDependentService, @IService1 s: IService1) {
         assert.ok(d);
         assert.equal(d.name, "farboo");
-        assert.ok(d.service2 instanceof Service2);
         assert.ok(s);
         assert.equal(s.c, 1);
     }
@@ -133,7 +169,7 @@ class ServiceLoop1 implements IService1 {
     _serviceBrand: any;
     c = 1;
 
-    constructor( @IService2 s: IService2) {
+    constructor(@IService2 s: IService2) {
 
     }
 }
@@ -142,7 +178,7 @@ class ServiceLoop2 implements IService2 {
     _serviceBrand: any;
     d = true;
 
-    constructor( @IService1 s: IService1) {
+    constructor(@IService1 s: IService1) {
 
     }
 }
@@ -185,6 +221,24 @@ suite("Instantiation Service", () => {
         collection.set(IService3, new Service3());
 
         service.createInstance(TargetWithStaticParam, true);
+    });
+
+    test("@Prop", function () {
+        let collection = new ServiceCollection();
+        let service = new InstantiationService(collection);
+        collection.set(IService1, new Service1());
+        collection.set(IService2, new Service2());
+
+        let propDepService = service.createInstance(PropDepService);
+        assert.ok(propDepService.service1 instanceof Service1);
+        assert.ok(propDepService.service2 instanceof Service2);
+    });
+
+    test("@Prop - optional", function () {
+        let collection = new ServiceCollection();
+        let service = new InstantiationService(collection);
+
+        service.createInstance(OptionalPropDepService);
     });
 
     test("service collection is live", function () {

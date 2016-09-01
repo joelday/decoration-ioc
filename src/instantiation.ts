@@ -6,7 +6,7 @@
 
 import { ServiceCollection } from "./serviceCollection";
 import * as descriptors from "./descriptors";
-import { isUndefined } from "./base/types";
+import { isUndefined, isObject } from "./base/types";
 
 // ------ internal util
 
@@ -186,16 +186,16 @@ function storeConstructorDependency(id: Function, target: Function, index: numbe
  * A *only* valid way to create a {{ServiceIdentifier}}.
  */
 export function createDecorator<T extends IService>(serviceId: string): { (...args: any[]): void; type: T; } {
-    let id = function(target: Function, key: string, index: number): any {
+    let id = function(target: Function, key: string, indexOrPropDescriptor: number & PropertyDescriptor): any {
         if (arguments.length !== 3) {
             throw new Error("@IServiceName-decorator can only be used to decorate a parameter or property");
         }
 
-        if (isUndefined(index)) {
+        if (isUndefined(indexOrPropDescriptor) || isObject(indexOrPropDescriptor)) {
             storePropertyDependency(id, target.constructor, key, false);
         }
         else {
-            storeConstructorDependency(id, target, index, false);
+            storeConstructorDependency(id, target, indexOrPropDescriptor, false);
         }
     };
 
@@ -208,16 +208,16 @@ export function createDecorator<T extends IService>(serviceId: string): { (...ar
  * Mark a service dependency as optional.
  */
 export function optional<T extends IService>(serviceIdentifier: ServiceIdentifier<T>): ParameterDecorator & PropertyDecorator {
-    return <any>function (target: Function, key: string, index: number){
+    return <any>function (target: Function, key: string, indexOrPropDescriptor: number & PropertyDescriptor) {
         if (arguments.length !== 3) {
             throw new Error("@optional-decorator can only be used to decorate a parameter or property");
         }
 
-        if (isUndefined(index)) {
+        if (isUndefined(indexOrPropDescriptor) || isObject(indexOrPropDescriptor)) {
             storePropertyDependency(serviceIdentifier, target.constructor, key, true);
         }
         else {
-            storeConstructorDependency(serviceIdentifier, target, index, true);
+            storeConstructorDependency(serviceIdentifier, target, indexOrPropDescriptor, true);
         }
     };
 }
