@@ -2,13 +2,13 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-'use strict';
+"use strict";
 
-import {create} from './base/types';
-import {Graph} from './base/graph';
-import {Descriptor} from './descriptors';
-import {ServiceIdentifier, IInstantiationService, ServicesAccessor, _util, optional} from './instantiation';
-import {ServiceCollection} from './serviceCollection';
+import { create } from "./base/types";
+import { Graph } from "./base/graph";
+import { Descriptor } from "./descriptors";
+import { ServiceIdentifier, IInstantiationService, ServicesAccessor, _util, optional, IService } from "./instantiation";
+import { ServiceCollection } from "./serviceCollection";
 
 declare const require: any;
 
@@ -45,10 +45,10 @@ export class InstantiationService implements IInstantiationService {
         let accessor: ServicesAccessor;
         try {
             accessor = {
-                get: <T>(id: ServiceIdentifier<T>, isOptional?: typeof optional) => {
+                get: <T extends IService>(id: ServiceIdentifier<T>, isOptional?: typeof optional) => {
                     const result = this._getOrCreateServiceInstance(id);
                     if (!result && isOptional !== optional) {
-                        throw new Error(`[invokeFunction] unkown service '${id}'`);
+                        throw new Error(`[invokeFunction] unkown service "${id}"`);
                     }
                     return result;
                 }
@@ -56,13 +56,12 @@ export class InstantiationService implements IInstantiationService {
             return signature.apply(undefined, [accessor].concat(args));
         } finally {
             accessor.get = function () {
-                throw new Error('service accessor is only valid during the invocation of its target method');
+                throw new Error("service accessor is only valid during the invocation of its target method");
             };
         }
     }
 
     createInstance<T>(param: any, ...rest:any[]): any {
-
         if (param instanceof Descriptor) {
             // sync
             return this._createInstance(param, rest);
@@ -73,21 +72,26 @@ export class InstantiationService implements IInstantiationService {
         }
     }
 
-    private _createInstance<T>(desc: Descriptor<T>, args: any[]): T {
+    private _verifyDependency(desc: Descriptor<any>, service: any, dependency: { id: ServiceIdentifier<any>, optional: boolean; }) {
+        if (!service && this._strict && !dependency.optional) {
+            throw new Error(`[createInstance] ${desc.ctor.name} depends on UNKNOWN service ${dependency.id}.`);
+        }
+    }
+
+    private _createInstance<T extends IService>(desc: Descriptor<T>, args: any[]): T {
 
         // arguments given by createInstance-call and/or the descriptor
         let staticArgs = desc.staticArguments().concat(args);
 
         // arguments defined by service decorators
-        let serviceDependencies = _util.getServiceDependencies(desc.ctor).sort((a, b) => a.index - b.index);
-        let serviceArgs = serviceDependencies.map(dependency => {
+        let serviceCtorDependencies = _util.getConstructorServiceDependencies(desc.ctor).sort((a, b) => a.index - b.index);
+        let serviceCtorArgs = serviceCtorDependencies.map(dependency => {
             let service = this._getOrCreateServiceInstance(dependency.id);
-            if (!service && this._strict && !dependency.optional) {
-                throw new Error(`[createInstance] ${desc.ctor.name} depends on UNKNOWN service ${dependency.id}.`);
-            }
+            this._verifyDependency(desc, service, dependency);
             return service;
         });
-        let firstServiceArgPos = serviceDependencies.length > 0 ? serviceDependencies[0].index : staticArgs.length;
+
+        let firstServiceArgPos = serviceCtorDependencies.length > 0 ? serviceCtorDependencies[0].index : staticArgs.length;
 
         // check for argument mismatches, adjust static args if needed
         if (staticArgs.length !== firstServiceArgPos) {
@@ -95,6 +99,7 @@ export class InstantiationService implements IInstantiationService {
                 firstServiceArgPos + 1} conflicts with ${staticArgs.length} static arguments`);
 
             let delta = firstServiceArgPos - staticArgs.length;
+
             if (delta > 0) {
                 staticArgs = staticArgs.concat(new Array(delta));
             } else {
@@ -102,24 +107,26 @@ export class InstantiationService implements IInstantiationService {
             }
         }
 
-        // // check for missing args
-        // for (let i = 0; i < serviceArgs.length; i++) {
-        //     if (!serviceArgs[i]) {
-        //         console.warn(`${desc.ctor.name} MISSES service dependency ${serviceDependencies[i].id}`, new Error().stack);
-        //     }
-        // }
-
         // now create the instance
         const argArray = [desc.ctor];
         argArray.push(...staticArgs);
-        argArray.push(...serviceArgs);
+        argArray.push(...serviceCtorArgs);
 
         const instance = create.apply(null, argArray);
         desc._validate(instance);
+
+        const servicePropertyDependencies = _util.getPropertyServiceDependencies(desc.ctor);
+        for (const dependency of servicePropertyDependencies) {
+            let service = this._getOrCreateServiceInstance(dependency.id);
+            this._verifyDependency(desc, service, dependency);
+
+            instance[dependency.key] = service;
+        }
+
         return <T>instance;
     }
 
-    private _getOrCreateServiceInstance<T>(id: ServiceIdentifier<T>): T {
+    private _getOrCreateServiceInstance<T extends IService>(id: ServiceIdentifier<T>): T {
         let thing = this._services.get(id);
         if (thing instanceof Descriptor) {
             return <T>this._createAndCacheServiceInstance(id, thing);
@@ -128,15 +135,15 @@ export class InstantiationService implements IInstantiationService {
         }
     }
 
-    private _createAndCacheServiceInstance<T>(id: ServiceIdentifier<T>, desc: Descriptor<T>): T {
+    private _createAndCacheServiceInstance<T extends IService>(id: ServiceIdentifier<T>, desc: Descriptor<T>): T {
         if (!(this._services.get(id) instanceof Descriptor)) {
-            throw new Error('service is not a SyncDescriptor');
+            throw new Error("service is not a SyncDescriptor");
         }
 
         const graph = new Graph<{ id: ServiceIdentifier<any>, desc: Descriptor<any> }>(data => data.id.toString());
 
         function throwCycleError() {
-            const err = new Error('[createInstance] cyclic dependency between services');
+            const err = new Error("[createInstance] cyclic dependency between services");
             err.message = graph.toString();
             throw err;
         }
@@ -154,7 +161,7 @@ export class InstantiationService implements IInstantiationService {
             }
 
             // check all dependencies for existence and if the need to be created first
-            let dependencies = _util.getServiceDependencies(item.desc.ctor);
+            let dependencies = _util.getConstructorServiceDependencies(item.desc.ctor);
             for (let dependency of dependencies) {
 
                 let instanceOrDesc = this._services.get(dependency.id);

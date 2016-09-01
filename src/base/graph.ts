@@ -2,10 +2,10 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-'use strict';
+"use strict";
 
-import {isEmptyObject} from './types';
-import {forEach, contains, lookup} from './collections';
+import { isEmptyObject } from "./types";
+import { forEach, contains, lookup } from "./collections";
 
 export interface Node<T> {
     data: T;
@@ -98,8 +98,8 @@ export class Graph<T> {
     toString(): string {
         let data: string[] = [];
         forEach(this._nodes, entry => {
-            data.push(`${entry.key}, (incoming)[${Object.keys(entry.value.incoming).join(', ')}], (outgoing)[${Object.keys(entry.value.outgoing).join(',')}]`);
+            data.push(`${entry.key}, (incoming)[${Object.keys(entry.value.incoming).join(", ")}], (outgoing)[${Object.keys(entry.value.outgoing).join(",")}]`);
         });
-        return data.join('\n');
+        return data.join("\n");
     }
 }

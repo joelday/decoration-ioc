@@ -2,8 +2,7 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-'use strict';
-
+"use strict";
 
 /**
  * An interface for a JavaScript object that
@@ -35,7 +34,7 @@ export function createNumberDictionary<V>(): INumberDictionary<V> {
  * @param what The key.
  * @param from A native JavaScript object that stores items.
  * @param alternate A default value this is return in case an item with
- *     the key isn't found.
+ *     the key isn"t found.
  */
 export function lookup<T>(from: IStringDictionary<T>, what: string, alternate?: T): T;
 export function lookup<T>(from: INumberDictionary<T>, what: number, alternate?: T): T;
@@ -49,7 +48,7 @@ export function lookup<T>(from: any, what: any, alternate: T = null): T {
 
 
 /**
- * Looks up a value from the set. If the set doesn't contain the
+ * Looks up a value from the set. If the set doesn"t contain the
  * value it inserts and returns the given alternate value.
  */
 export function lookupOrInsert<T>(from: IStringDictionary<T>, key: string, alternate: T): T;
@@ -61,7 +60,7 @@ export function lookupOrInsert<T>(from: any, stringOrNumber: any, alternate: any
     if (contains(from, key)) {
         return from[key];
     } else {
-        if (typeof alternate === 'function') {
+        if (typeof alternate === "function") {
             alternate = alternate();
         }
         from[key] = alternate;

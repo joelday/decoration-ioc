@@ -2,63 +2,72 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-'use strict';
+"use strict";
 
-import {ServiceCollection} from './serviceCollection';
-import * as descriptors from './descriptors';
+import { ServiceCollection } from "./serviceCollection";
+import * as descriptors from "./descriptors";
+import { isUndefined } from "./base/types";
 
 // ------ internal util
 
 export namespace _util {
+    export const DI_TARGET = "$di$target";
+    export const DI_CONSTRUCTOR_DEPENDENCIES = "$di$constructorDependencies";
+    export const DI_PROPERTY_DEPENDENCIES = "$di$propertyDependencies";
 
-    export const DI_TARGET = '$di$target';
-    export const DI_DEPENDENCIES = '$di$dependencies';
+    export function getConstructorServiceDependencies(ctor: any): { id: ServiceIdentifier<any>, index: number, optional: boolean }[] {
+        return ctor[DI_CONSTRUCTOR_DEPENDENCIES] || [];
+    }
 
-    export function getServiceDependencies(ctor: any): { id: ServiceIdentifier<any>, index: number, optional: boolean }[] {
-        return ctor[DI_DEPENDENCIES] || [];
+    export function getPropertyServiceDependencies(ctor: any): { id: ServiceIdentifier<any>, key: string, optional: boolean }[] {
+        return ctor[DI_PROPERTY_DEPENDENCIES] || [];
     }
 }
 
 // --- interfaces ------
 
+export interface IService {
+    _serviceBrand: any;
+}
+
 export interface IConstructorSignature0<T> {
-    new (...services: { _serviceBrand: any; }[]): T;
+    new (...services: IService[]): T;
 }
 
 export interface IConstructorSignature1<A1, T> {
-    new (first: A1, ...services: { _serviceBrand: any; }[]): T;
+    new (first: A1, ...services: IService[]): T;
 }
 
 export interface IConstructorSignature2<A1, A2, T> {
-    new (first: A1, second: A2, ...services: { _serviceBrand: any; }[]): T;
+    new (first: A1, second: A2, ...services: IService[]): T;
 }
 
 export interface IConstructorSignature3<A1, A2, A3, T> {
-    new (first: A1, second: A2, third: A3, ...services: { _serviceBrand: any; }[]): T;
+    new (first: A1, second: A2, third: A3, ...services: IService[]): T;
 }
 
 export interface IConstructorSignature4<A1, A2, A3, A4, T> {
-    new (first: A1, second: A2, third: A3, forth: A4, ...services: { _serviceBrand: any; }[]): T;
+    new (first: A1, second: A2, third: A3, forth: A4, ...services: IService[]): T;
 }
 
 export interface IConstructorSignature5<A1, A2, A3, A4, A5, T> {
-    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, ...services: { _serviceBrand: any; }[]): T;
+    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, ...services: IService[]): T;
 }
 
 export interface IConstructorSignature6<A1, A2, A3, A4, A5, A6, T> {
-    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, ...services: { _serviceBrand: any; }[]): T;
+    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, ...services: IService[]): T;
 }
 
 export interface IConstructorSignature7<A1, A2, A3, A4, A5, A6, A7, T> {
-    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, seventh: A7, ...services: { _serviceBrand: any; }[]): T;
+    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, seventh: A7, ...services: IService[]): T;
 }
 
 export interface IConstructorSignature8<A1, A2, A3, A4, A5, A6, A7, A8, T> {
-    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, seventh: A7, eigth: A8, ...services: { _serviceBrand: any; }[]): T;
+    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, seventh: A7, eigth: A8, ...services: IService[]): T;
 }
 
 export interface ServicesAccessor {
-    get<T>(id: ServiceIdentifier<T>, isOptional?: typeof optional): T;
+    get<T extends IService>(id: ServiceIdentifier<T>, isOptional?: typeof optional): T;
 }
 
 export interface IFunctionSignature0<R> {
@@ -97,7 +106,7 @@ export interface IFunctionSignature8<A1, A2, A3, A4, A5, A6, A7, A8, R> {
     (accessor: ServicesAccessor, first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, seventh: A7, eigth: A8): R;
 }
 
-export var IInstantiationService = createDecorator<IInstantiationService>('instantiationService');
+export const IInstantiationService = createDecorator<IInstantiationService>("instantiationService");
 
 export interface IInstantiationService {
 
@@ -147,34 +156,47 @@ export interface IInstantiationService {
     createChild(services: ServiceCollection): IInstantiationService;
 }
 
-
 /**
  * Identifies a service of type T
  */
-export interface ServiceIdentifier<T> {
+export interface ServiceIdentifier<T extends IService> {
     (...args: any[]): void;
     type: T;
 }
 
-function storeServiceDependency(id: Function, target: Function, index: number, optional: boolean): void {
-    if (target[_util.DI_TARGET] === target) {
-        target[_util.DI_DEPENDENCIES].push({ id, index, optional });
-    } else {
-        target[_util.DI_DEPENDENCIES] = [{ id, index, optional }];
+function ensureDependencyMetadata(target: Function) {
+    if (target[_util.DI_TARGET] !== target) {
         target[_util.DI_TARGET] = target;
+        target[_util.DI_CONSTRUCTOR_DEPENDENCIES] = [];
+        target[_util.DI_PROPERTY_DEPENDENCIES] = [];
     }
+}
+
+function storePropertyDependency(id: Function, target: Function, key: string, optional: boolean): void {
+    ensureDependencyMetadata(target);
+    target[_util.DI_PROPERTY_DEPENDENCIES].push({ id, key, optional });
+}
+
+function storeConstructorDependency(id: Function, target: Function, index: number, optional: boolean): void {
+    ensureDependencyMetadata(target);
+    target[_util.DI_CONSTRUCTOR_DEPENDENCIES].push({ id, index, optional });
 }
 
 /**
  * A *only* valid way to create a {{ServiceIdentifier}}.
  */
-export function createDecorator<T>(serviceId: string): { (...args: any[]): void; type: T; } {
-
+export function createDecorator<T extends IService>(serviceId: string): { (...args: any[]): void; type: T; } {
     let id = function(target: Function, key: string, index: number): any {
         if (arguments.length !== 3) {
-            throw new Error('@IServiceName-decorator can only be used to decorate a parameter');
+            throw new Error("@IServiceName-decorator can only be used to decorate a parameter or property");
         }
-        storeServiceDependency(id, target, index, false);
+
+        if (isUndefined(index)) {
+            storePropertyDependency(id, target.constructor, key, false);
+        }
+        else {
+            storeConstructorDependency(id, target, index, false);
+        }
     };
 
     id.toString = () => serviceId;
@@ -185,12 +207,17 @@ export function createDecorator<T>(serviceId: string): { (...args: any[]): void;
 /**
  * Mark a service dependency as optional.
  */
-export function optional<T>(serviceIdentifier: ServiceIdentifier<T>) {
-
-    return function (target: Function, key: string, index: number){
+export function optional<T extends IService>(serviceIdentifier: ServiceIdentifier<T>): ParameterDecorator & PropertyDecorator {
+    return <any>function (target: Function, key: string, index: number){
         if (arguments.length !== 3) {
-            throw new Error('@optional-decorator can only be used to decorate a parameter');
+            throw new Error("@optional-decorator can only be used to decorate a parameter or property");
         }
-        storeServiceDependency(serviceIdentifier, target, index, true);
+
+        if (isUndefined(index)) {
+            storePropertyDependency(serviceIdentifier, target.constructor, key, true);
+        }
+        else {
+            storeConstructorDependency(serviceIdentifier, target, index, true);
+        }
     };
 }

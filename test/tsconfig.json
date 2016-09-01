@@ -3,13 +3,7 @@
         "module": "commonjs",
         "target": "es5",
         "noImplicitAny": false,
-        "outDir": "lib",
-        "declaration": true,
+        "inlineSourceMap": true,
         "experimentalDecorators": true
-    },
-    "exclude": [
-        "node_modules",
-        "lib",
-        "test"
-    ]
+    }
 }

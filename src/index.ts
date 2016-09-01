@@ -1,18 +1,23 @@
-'use strict';
+"use strict";
 
-import * as instantiationService from './instantiationService';
+import * as instantiationService from "./instantiationService";
 
-import {Descriptor} from './descriptors';
-import {createDecorator, IInstantiationService} from './instantiation';
-import {ServiceCollection} from './serviceCollection';
+import { Descriptor } from "./descriptors";
+import { createDecorator, IInstantiationService, optional, ServicesAccessor } from "./instantiation";
+import { ServiceCollection } from "./serviceCollection";
+import { registerSingleton, getServices } from "./extensions";
 
 export const InstantiationService: {
     new (services?: ServiceCollection, strict?: boolean): IInstantiationService;
 } = instantiationService.InstantiationService;
 
 export {
-    Descriptor,
     createDecorator,
+    Descriptor,
     IInstantiationService,
-    ServiceCollection
+    optional,
+    ServiceCollection,
+    ServicesAccessor,
+    registerSingleton,
+    getServices
 }

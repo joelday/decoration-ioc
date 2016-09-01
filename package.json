@@ -1,6 +1,6 @@
 {
   "name": "decoration-ioc",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "A TypeScript inversion of control and dependency injection framework",
   "main": "lib/index.js",
   "files": [
@@ -9,12 +9,15 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "del-cli lib",
-    "lint": "tslint src/**/*.ts",
-    "compile": "tsc && npm run lint",
-    "prepublish": "npm run clean && npm run compile"
+    "compile": "tslint src/**/*.ts && tsc && tslint test/**/*.ts && tsc --project test/tsconfig.json",
+    "test": "npm run compile && mocha -u tdd",
+    "prepublish": "npm run clean && npm run test"
   },
   "devDependencies": {
+    "@types/mocha": "^2.2.31",
+    "@types/node": "^6.0.38",
     "del-cli": "^0.2.0",
+    "mocha": "^3.0.2",
     "tslint": "^3.15.1",
     "tslint-microsoft-contrib": "^2.0.10",
     "typescript": "^1.8.10"

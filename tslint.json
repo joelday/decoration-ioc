@@ -2,11 +2,12 @@
 	"rules": {
 		"indent": [
 			true,
+			4,
 			"spaces"
 		],
 		"quotemark": [
 			true,
-			"single"
+			"double"
 		],
 		"no-unused-expression": true,
 		"no-unreachable": true,
