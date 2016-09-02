@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/joelday/decoration-ioc.svg?branch=master)](https://travis-ci.org/joelday/decoration-ioc)
+[![npm version](https://badge.fury.io/js/decoration-ioc.svg)](https://badge.fury.io/js/decoration-ioc)
+[![dependencies Status](https://david-dm.org/joelday/decoration-ioc/status.svg)](https://david-dm.org/joelday/decoration-ioc)
+
 # The instantiation system used in Visual Studio Code
 decoration-ioc is a TypeScript inversion of control and dependency injection framework. Based on the system used in Visual Studio Code, decoration-ioc provides service location and constructor injection with automatic dependency resolution.
 
