@@ -183,7 +183,7 @@ class ServiceLoop2 implements IService2 {
     }
 }
 
-console.log("Hello Travis!");
+console.log("Hello Travis!!!");
 
 suite("Instantiation Service", () => {
 
