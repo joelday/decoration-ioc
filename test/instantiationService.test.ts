@@ -183,6 +183,8 @@ class ServiceLoop2 implements IService2 {
     }
 }
 
+console.log("Hello Travis!");
+
 suite("Instantiation Service", () => {
 
     test("service collection, cannot overwrite", function () {
