@@ -10,8 +10,6 @@ import { Descriptor } from "./descriptors";
 import { ServiceIdentifier, IInstantiationService, ServicesAccessor, _util, optional, IService } from "./instantiation";
 import { ServiceCollection } from "./serviceCollection";
 
-declare const require: any;
-
 export class InstantiationService implements IInstantiationService {
 
     _serviceBrand: any;
@@ -58,10 +56,10 @@ export class InstantiationService implements IInstantiationService {
             accessor.get = function () {
                 throw new Error("service accessor is only valid during the invocation of its target method");
             };
-        }
+        }   
     }
 
-    createInstance<T>(param: any, ...rest:any[]): any {
+    createInstance(param: any, ...rest:any[]): any {
         if (param instanceof Descriptor) {
             // sync
             return this._createInstance(param, rest);

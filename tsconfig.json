@@ -5,7 +5,9 @@
         "noImplicitAny": false,
         "outDir": "lib",
         "declaration": true,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true
     },
     "exclude": [
         "node_modules",

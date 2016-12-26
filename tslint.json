@@ -10,14 +10,12 @@
 			"double"
 		],
 		"no-unused-expression": true,
-		"no-unreachable": true,
 		"no-duplicate-variable": true,
-		"no-duplicate-key": true,
-		"no-unused-variable": true,
 		"curly": true,
 		"class-name": true,
 		"semicolon": [true],
 		"triple-equals": true,
-		"no-trailing-whitespace": true
+		"no-trailing-whitespace": true,
+		"prefer-const": true
 	}
 }

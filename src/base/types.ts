@@ -102,7 +102,7 @@ export function isEmptyObject(obj: any): obj is any {
         return false;
     }
 
-    for (let key in obj) {
+    for (const key in obj) {
         if (hasOwnProperty.call(obj, key)) {
             return false;
         }
@@ -159,7 +159,7 @@ export function validateConstraint(arg: any, constraint: TypeConstraint): void {
  * any additional argument supplied.
  */
 export function create(ctor: Function, ...args: any[]): any {
-    let obj = Object.create(ctor.prototype);
+    const obj = Object.create(ctor.prototype);
     ctor.apply(obj, args);
 
     return obj;

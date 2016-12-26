@@ -27,7 +27,7 @@ export namespace _util {
 // --- interfaces ------
 
 export interface IService {
-    _serviceBrand: any;
+    _serviceBrand?: any;
 }
 
 export interface IConstructorSignature0<T> {

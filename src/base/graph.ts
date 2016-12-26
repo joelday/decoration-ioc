@@ -96,7 +96,7 @@ export class Graph<T> {
     }
 
     toString(): string {
-        let data: string[] = [];
+        const data: string[] = [];
         forEach(this._nodes, entry => {
             data.push(`${entry.key}, (incoming)[${Object.keys(entry.value.incoming).join(", ")}], (outgoing)[${Object.keys(entry.value.outgoing).join(",")}]`);
         });

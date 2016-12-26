@@ -45,8 +45,8 @@ export function binarySearch<T>(array: T[], key: T, comparator: (op1: T, op2: T)
         high = array.length - 1;
 
     while (low <= high) {
-        let mid = ((low + high) / 2) | 0;
-        let comp = comparator(array[mid], key);
+        const mid = ((low + high) / 2) | 0;
+        const comp = comparator(array[mid], key);
         if (comp < 0) {
             low = mid + 1;
         } else if (comp > 0) {
@@ -69,7 +69,7 @@ export function findFirst<T>(array: T[], p: (x: T) => boolean): number {
         return 0; // no children
     }
     while (low < high) {
-        let mid = Math.floor((low + high) / 2);
+        const mid = Math.floor((low + high) / 2);
         if (p(array[mid])) {
             high = mid;
         } else {
@@ -91,7 +91,8 @@ export function findFirst<T>(array: T[], p: (x: T) => boolean): number {
  */
 export function top<T>(array: T[], compare: (a: T, b: T) => number, n: number) {
     const result = array.slice(0, n).sort(compare);
-    for (let i = n, m = array.length; i < m; i++) {
+    const m = array.length;
+    for (let i = n; i < m; i++) {
         const element = array[i];
         if (compare(element, result[n - 1]) < 0) {
             result.pop();
@@ -105,15 +106,16 @@ export function top<T>(array: T[], compare: (a: T, b: T) => number, n: number) {
 export function merge<T>(arrays: T[][], hashFn?: (element: T) => string): T[] {
     const result = new Array<T>();
     if (!hashFn) {
-        for (let i = 0, len = arrays.length; i < len; i++) {
+        const len = arrays.length;
+        for (let i = 0; i < len; i++) {
             result.push.apply(result, arrays[i]);
         }
     } else {
         const map: { [k: string]: boolean } = {};
         for (let i = 0; i < arrays.length; i++) {
             for (let j = 0; j < arrays[i].length; j++) {
-                let element = arrays[i][j],
-                    hash = hashFn(element);
+                const element = arrays[i][j],
+                      hash = hashFn(element);
 
                 if (!map.hasOwnProperty(hash)) {
                     map[hash] = true;
