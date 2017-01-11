@@ -186,7 +186,7 @@ function storeConstructorDependency(id: Function, target: Function, index: numbe
  * A *only* valid way to create a {{ServiceIdentifier}}.
  */
 export function createDecorator<T extends IService>(serviceId: string): { (...args: any[]): void; type: T; } {
-    let id = function(target: Function, key: string, indexOrPropDescriptor: number & PropertyDescriptor): any {
+    const id = function(target: Function, key: string, indexOrPropDescriptor: number & PropertyDescriptor): any {
         if (arguments.length !== 3) {
             throw new Error("@IServiceName-decorator can only be used to decorate a parameter or property");
         }

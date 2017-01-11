@@ -154,15 +154,16 @@ export function validateConstraint(arg: any, constraint: TypeConstraint): void {
     }
 }
 
+export type ClassType = {
+    new<T>(...params: any[]): T;
+};
+
 /**
  * Creates a new object of the provided class and will call the constructor with
  * any additional argument supplied.
  */
-export function create(ctor: Function, ...args: any[]): any {
-    const obj = Object.create(ctor.prototype);
-    ctor.apply(obj, args);
-
-    return obj;
+export function create(ctor: ClassType, ...args: any[]): any {
+    return new ctor(...args);
 }
 
 export interface IFunction0<T> {

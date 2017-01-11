@@ -15,7 +15,7 @@ export class ServiceCollection {
     private _entries: Entry[] = [];
 
     constructor(...entries:[ServiceIdentifier<any>, any][]) {
-        for (let entry of entries) {
+        for (const entry of entries) {
             this.set(entry[0], entry[1]);
         }
     }
@@ -34,8 +34,8 @@ export class ServiceCollection {
     }
 
     forEach(callback: (id: ServiceIdentifier<any>, instanceOrDescriptor: any) => any): void {
-        for (let entry of this._entries) {
-            let [id, instanceOrDescriptor] = entry;
+        for (const entry of this._entries) {
+            const [id, instanceOrDescriptor] = entry;
             callback(id, instanceOrDescriptor);
         }
     }

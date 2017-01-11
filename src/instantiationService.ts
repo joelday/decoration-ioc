@@ -56,7 +56,7 @@ export class InstantiationService implements IInstantiationService {
             accessor.get = function () {
                 throw new Error("service accessor is only valid during the invocation of its target method");
             };
-        }   
+        }
     }
 
     createInstance(param: any, ...rest:any[]): any {
@@ -82,21 +82,21 @@ export class InstantiationService implements IInstantiationService {
         let staticArgs = desc.staticArguments().concat(args);
 
         // arguments defined by service decorators
-        let serviceCtorDependencies = _util.getConstructorServiceDependencies(desc.ctor).sort((a, b) => a.index - b.index);
-        let serviceCtorArgs = serviceCtorDependencies.map(dependency => {
-            let service = this._getOrCreateServiceInstance(dependency.id);
+        const serviceCtorDependencies = _util.getConstructorServiceDependencies(desc.ctor).sort((a, b) => a.index - b.index);
+        const serviceCtorArgs = serviceCtorDependencies.map(dependency => {
+            const service = this._getOrCreateServiceInstance(dependency.id);
             this._verifyDependency(desc, service, dependency);
             return service;
         });
 
-        let firstServiceArgPos = serviceCtorDependencies.length > 0 ? serviceCtorDependencies[0].index : staticArgs.length;
+        const firstServiceArgPos = serviceCtorDependencies.length > 0 ? serviceCtorDependencies[0].index : staticArgs.length;
 
         // check for argument mismatches, adjust static args if needed
         if (staticArgs.length !== firstServiceArgPos) {
             console.warn(`[createInstance] First service dependency of ${desc.ctor.name} at position ${
                 firstServiceArgPos + 1} conflicts with ${staticArgs.length} static arguments`);
 
-            let delta = firstServiceArgPos - staticArgs.length;
+            const delta = firstServiceArgPos - staticArgs.length;
 
             if (delta > 0) {
                 staticArgs = staticArgs.concat(new Array(delta));
@@ -115,7 +115,7 @@ export class InstantiationService implements IInstantiationService {
 
         const servicePropertyDependencies = _util.getPropertyServiceDependencies(desc.ctor);
         for (const dependency of servicePropertyDependencies) {
-            let service = this._getOrCreateServiceInstance(dependency.id);
+            const service = this._getOrCreateServiceInstance(dependency.id);
             this._verifyDependency(desc, service, dependency);
 
             instance[dependency.key] = service;
@@ -125,7 +125,7 @@ export class InstantiationService implements IInstantiationService {
     }
 
     private _getOrCreateServiceInstance<T extends IService>(id: ServiceIdentifier<T>): T {
-        let thing = this._services.get(id);
+        const thing = this._services.get(id);
         if (thing instanceof Descriptor) {
             return <T>this._createAndCacheServiceInstance(id, thing);
         } else {
@@ -159,10 +159,10 @@ export class InstantiationService implements IInstantiationService {
             }
 
             // check all dependencies for existence and if the need to be created first
-            let dependencies = _util.getConstructorServiceDependencies(item.desc.ctor);
-            for (let dependency of dependencies) {
+            const dependencies = _util.getConstructorServiceDependencies(item.desc.ctor);
+            for (const dependency of dependencies) {
 
-                let instanceOrDesc = this._services.get(dependency.id);
+                const instanceOrDesc = this._services.get(dependency.id);
                 if (!instanceOrDesc) {
                     console.warn(`[createInstance] ${id} depends on ${dependency.id} which is NOT registered.`);
                 }
@@ -176,7 +176,7 @@ export class InstantiationService implements IInstantiationService {
         }
 
         while (true) {
-            let roots = graph.roots();
+            const roots = graph.roots();
 
             // if there is no more roots but still
             // nodes in the graph we have a cycle
@@ -187,7 +187,7 @@ export class InstantiationService implements IInstantiationService {
                 break;
             }
 
-            for (let root of roots) {
+            for (const root of roots) {
                 // create instance and overwrite the service collections
                 const instance = this._createInstance(root.data.desc, []);
                 this._services.set(root.data.id, instance);
