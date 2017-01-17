@@ -15,8 +15,6 @@ The ```experimentalDecorators``` TypeScript compiler option must be set to ```tr
 ```typescript
 // Define the service
 export interface IMyService {
-    _serviceBrand: any; // This field is required
-
     sayHello(): string;
 }
 
@@ -28,8 +26,6 @@ export const IMyService = createDecorator<IMyService>('myService');
 ## Create a concrete implementation
 ```typescript
 export class MyService implements IMyService {
-    public _serviceBrand: any;
-
     sayHello() {
         return 'Hello!';
     }
@@ -69,6 +65,3 @@ export class MyDependentClass {
 const myDependentClass = instantiationService.createInstance(MyDependentClass);
 myDependentClass.makeMyServiceSayHello();
 ```
-
-## Notes
-- decoration-ioc does not currently support asynchronous instantiation.
