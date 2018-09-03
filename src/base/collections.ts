@@ -97,7 +97,7 @@ export function values<T>(from: IStringDictionary<T>): T[];
 export function values<T>(from: INumberDictionary<T>): T[];
 export function values<T>(from: any): any[] {
     const result: T[] = [];
-    for (var key in from) {
+    for (const key in from) {
         if (hasOwnProperty.call(from, key)) {
             result.push(from[key]);
         }
@@ -112,7 +112,7 @@ export function values<T>(from: any): any[] {
 export function forEach<T>(from: IStringDictionary<T>, callback: (entry: { key: string; value: T; }, remove: Function) => any): void;
 export function forEach<T>(from: INumberDictionary<T>, callback: (entry: { key: number; value: T; }, remove: Function) => any): void;
 export function forEach<T>(from: any, callback: (entry: { key: any; value: T; }, remove: Function) => any): void {
-    for (var key in from) {
+    for (const key in from) {
         if (hasOwnProperty.call(from, key)) {
             const result = callback({ key: key, value: from[key] }, function() {
                 delete from[key];

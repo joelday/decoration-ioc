@@ -7,13 +7,10 @@
 import { create } from "./base/types";
 import { Graph } from "./base/graph";
 import { Descriptor } from "./descriptors";
-import { ServiceIdentifier, IInstantiationService, ServicesAccessor, _util, optional, IService } from "./instantiation";
+import { ServiceIdentifier, IInstantiationService, ServicesAccessor, _util, optional } from "./instantiation";
 import { ServiceCollection } from "./serviceCollection";
 
 export class InstantiationService implements IInstantiationService {
-
-    _serviceBrand: any;
-
     private _services: ServiceCollection;
     private _strict: boolean;
 
@@ -43,7 +40,7 @@ export class InstantiationService implements IInstantiationService {
         let accessor: ServicesAccessor;
         try {
             accessor = {
-                get: <T extends IService>(id: ServiceIdentifier<T>, isOptional?: typeof optional) => {
+                get: <T>(id: ServiceIdentifier<T>, isOptional?: typeof optional) => {
                     const result = this._getOrCreateServiceInstance(id);
                     if (!result && isOptional !== optional) {
                         throw new Error(`[invokeFunction] unkown service "${id}"`);
@@ -76,7 +73,7 @@ export class InstantiationService implements IInstantiationService {
         }
     }
 
-    private _createInstance<T extends IService>(desc: Descriptor<T>, args: any[]): T {
+    private _createInstance<T>(desc: Descriptor<T>, args: any[]): T {
 
         // arguments given by createInstance-call and/or the descriptor
         let staticArgs = desc.staticArguments().concat(args);
@@ -124,7 +121,7 @@ export class InstantiationService implements IInstantiationService {
         return <T>instance;
     }
 
-    private _getOrCreateServiceInstance<T extends IService>(id: ServiceIdentifier<T>): T {
+    private _getOrCreateServiceInstance<T>(id: ServiceIdentifier<T>): T {
         const thing = this._services.get(id);
         if (thing instanceof Descriptor) {
             return <T>this._createAndCacheServiceInstance(id, thing);
@@ -133,7 +130,7 @@ export class InstantiationService implements IInstantiationService {
         }
     }
 
-    private _createAndCacheServiceInstance<T extends IService>(id: ServiceIdentifier<T>, desc: Descriptor<T>): T {
+    private _createAndCacheServiceInstance<T>(id: ServiceIdentifier<T>, desc: Descriptor<T>): T {
         if (!(this._services.get(id) instanceof Descriptor)) {
             throw new Error("service is not a SyncDescriptor");
         }

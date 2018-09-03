@@ -26,48 +26,44 @@ export namespace _util {
 
 // --- interfaces ------
 
-export interface IService {
-    _serviceBrand?: any;
-}
-
 export interface IConstructorSignature0<T> {
-    new (...services: IService[]): T;
+    new (...services: any[]): T;
 }
 
 export interface IConstructorSignature1<A1, T> {
-    new (first: A1, ...services: IService[]): T;
+    new (first: A1, ...services: any[]): T;
 }
 
 export interface IConstructorSignature2<A1, A2, T> {
-    new (first: A1, second: A2, ...services: IService[]): T;
+    new (first: A1, second: A2, ...services: any[]): T;
 }
 
 export interface IConstructorSignature3<A1, A2, A3, T> {
-    new (first: A1, second: A2, third: A3, ...services: IService[]): T;
+    new (first: A1, second: A2, third: A3, ...services: any[]): T;
 }
 
 export interface IConstructorSignature4<A1, A2, A3, A4, T> {
-    new (first: A1, second: A2, third: A3, forth: A4, ...services: IService[]): T;
+    new (first: A1, second: A2, third: A3, forth: A4, ...services: any[]): T;
 }
 
 export interface IConstructorSignature5<A1, A2, A3, A4, A5, T> {
-    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, ...services: IService[]): T;
+    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, ...services: any[]): T;
 }
 
 export interface IConstructorSignature6<A1, A2, A3, A4, A5, A6, T> {
-    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, ...services: IService[]): T;
+    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, ...services: any[]): T;
 }
 
 export interface IConstructorSignature7<A1, A2, A3, A4, A5, A6, A7, T> {
-    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, seventh: A7, ...services: IService[]): T;
+    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, seventh: A7, ...services: any[]): T;
 }
 
 export interface IConstructorSignature8<A1, A2, A3, A4, A5, A6, A7, A8, T> {
-    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, seventh: A7, eigth: A8, ...services: IService[]): T;
+    new (first: A1, second: A2, third: A3, forth: A4, fifth: A5, sixth: A6, seventh: A7, eigth: A8, ...services: any[]): T;
 }
 
 export interface ServicesAccessor {
-    get<T extends IService>(id: ServiceIdentifier<T>, isOptional?: typeof optional): T;
+    get<T>(id: ServiceIdentifier<T>, isOptional?: typeof optional): T;
 }
 
 export interface IFunctionSignature0<R> {
@@ -109,9 +105,6 @@ export interface IFunctionSignature8<A1, A2, A3, A4, A5, A6, A7, A8, R> {
 export const IInstantiationService = createDecorator<IInstantiationService>("instantiationService");
 
 export interface IInstantiationService {
-
-    _serviceBrand: any;
-
     /**
      * Synchronously creates an instance that is denoted by
      * the descriptor
@@ -159,7 +152,7 @@ export interface IInstantiationService {
 /**
  * Identifies a service of type T
  */
-export interface ServiceIdentifier<T extends IService> {
+export interface ServiceIdentifier<T> {
     (...args: any[]): void;
     type: T;
 }
@@ -185,10 +178,10 @@ function storeConstructorDependency(id: Function, target: Function, index: numbe
 /**
  * A *only* valid way to create a {{ServiceIdentifier}}.
  */
-export function createDecorator<T extends IService>(serviceId: string): { (...args: any[]): void; type: T; } {
+export function createDecorator<T>(serviceId: string): { (...args: any[]): void; type: T; } {
     const id = function(target: Function, key: string, indexOrPropDescriptor: number & PropertyDescriptor): any {
         if (arguments.length !== 3) {
-            throw new Error("@IServiceName-decorator can only be used to decorate a parameter or property");
+            throw new Error("@anyName-decorator can only be used to decorate a parameter or property");
         }
 
         if (isUndefined(indexOrPropDescriptor) || isObject(indexOrPropDescriptor)) {
@@ -207,7 +200,7 @@ export function createDecorator<T extends IService>(serviceId: string): { (...ar
 /**
  * Mark a service dependency as optional.
  */
-export function optional<T extends IService>(serviceIdentifier: ServiceIdentifier<T>): ParameterDecorator & PropertyDecorator {
+export function optional<T>(serviceIdentifier: ServiceIdentifier<T>): ParameterDecorator & PropertyDecorator {
     return <any>function (target: Function, key: string, indexOrPropDescriptor: number & PropertyDescriptor) {
         if (arguments.length !== 3) {
             throw new Error("@optional-decorator can only be used to decorate a parameter or property");

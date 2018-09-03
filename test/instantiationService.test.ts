@@ -19,53 +19,44 @@ import {
 const IService1 = createDecorator<IService1>("service1");
 
 interface IService1 {
-    _serviceBrand: any;
     c: number;
 }
 
 class Service1 implements IService1 {
-    _serviceBrand: any;
     c = 1;
 }
 
 const IService2 = createDecorator<IService2>("service2");
 
 interface IService2 {
-    _serviceBrand: any;
     d: boolean;
 }
 
 class Service2 implements IService2 {
-    _serviceBrand: any;
     d = true;
 }
 
 const IService3 = createDecorator<IService3>("service3");
 
 interface IService3 {
-    _serviceBrand: any;
     s: string;
 }
 
 class Service3 implements IService3 {
-    _serviceBrand: any;
     s = "farboo";
 }
 
 const IDependentService = createDecorator<IDependentService>("dependentService");
 
 interface IDependentService {
-    _serviceBrand: any;
     name: string;
 }
 
 class DependentService implements IDependentService {
-    _serviceBrand: any;
-
     @IService2
     service2: IService2;
 
-    constructor( @IService1 service: IService1) {
+    constructor(@IService1 service: IService1) {
         assert.equal(service.c, 1);
     }
 
@@ -78,8 +69,6 @@ interface IPropertyDependentService {
 }
 
 class PropDepService implements IPropertyDependentService {
-    _serviceBrand: any;
-
     private _service1: IService1;
 
     @IService1
@@ -96,8 +85,6 @@ class PropDepService implements IPropertyDependentService {
 }
 
 class OptionalPropDepService implements IPropertyDependentService {
-    _serviceBrand: any;
-
     private _service1: IService1;
 
     @optional(IService1)
@@ -166,7 +153,6 @@ class DependentServiceTarget2 {
 
 
 class ServiceLoop1 implements IService1 {
-    _serviceBrand: any;
     c = 1;
 
     constructor(@IService2 s: IService2) {
@@ -175,7 +161,6 @@ class ServiceLoop1 implements IService1 {
 }
 
 class ServiceLoop2 implements IService2 {
-    _serviceBrand: any;
     d = true;
 
     constructor(@IService1 s: IService1) {
@@ -184,7 +169,6 @@ class ServiceLoop2 implements IService2 {
 }
 
 suite("Instantiation Service", () => {
-
     test("service collection, cannot overwrite", function () {
         const collection = new ServiceCollection();
         let result = collection.set(IService1, null);
@@ -415,7 +399,7 @@ suite("Instantiation Service", () => {
         let serviceInstanceCount = 0;
 
         const CtorCounter = class implements Service1 {
-            _serviceBrand: any;
+
             c = 1;
             constructor() {
                 serviceInstanceCount += 1;

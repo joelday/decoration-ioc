@@ -5,7 +5,7 @@
 "use strict";
 
 import { binarySearch } from "./base/arrays";
-import { ServiceIdentifier, IService } from "./instantiation";
+import { ServiceIdentifier } from "./instantiation";
 import { Descriptor } from "./descriptors";
 
 type Entry = [ServiceIdentifier<any>, any];
@@ -20,7 +20,7 @@ export class ServiceCollection {
         }
     }
 
-    set<T extends IService>(id: ServiceIdentifier<T>, instanceOrDescriptor: T | Descriptor<T>): T | Descriptor<T> {
+    set<T>(id: ServiceIdentifier<T>, instanceOrDescriptor: T | Descriptor<T>): T | Descriptor<T> {
         const entry: Entry = [id, instanceOrDescriptor];
         const idx = binarySearch(this._entries, entry, ServiceCollection._entryCompare);
         if (idx < 0) {
@@ -44,7 +44,7 @@ export class ServiceCollection {
         return binarySearch(this._entries, ServiceCollection._searchEntry(id), ServiceCollection._entryCompare) >= 0;
     }
 
-    get<T extends IService>(id: ServiceIdentifier<T>): T | Descriptor<T> {
+    get<T>(id: ServiceIdentifier<T>): T | Descriptor<T> {
         const idx = binarySearch(this._entries, ServiceCollection._searchEntry(id), ServiceCollection._entryCompare);
         if (idx >= 0) {
             return this._entries[idx][1];
