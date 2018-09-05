@@ -6,10 +6,13 @@
 
 import * as instantiation from "./instantiation";
 
-export class AbstractDescriptor<T> {
+export class Descriptor<T> {
+    private readonly _ctor: any;
+    private readonly _staticArguments: any[];
 
-    constructor(private _staticArguments: any[]) {
-        // empty
+    constructor(ctor: any, ...staticArguments: any[]) {
+        this._ctor = ctor;
+        this._staticArguments = staticArguments;
     }
 
     public appendStaticArguments(more: any[]): void {
@@ -26,19 +29,6 @@ export class AbstractDescriptor<T> {
         }
     }
 
-    _validate(type: T): void {
-        if (!type) {
-            throw new Error("can not be falsy");
-        }
-    }
-}
-
-export class Descriptor<T> extends AbstractDescriptor<T> {
-
-    constructor(private _ctor: any, ...staticArguments: any[]) {
-        super(staticArguments);
-    }
-
     public get ctor(): any {
         return this._ctor;
     }
@@ -48,6 +38,12 @@ export class Descriptor<T> extends AbstractDescriptor<T> {
         allArgs = allArgs.concat(this.staticArguments());
         allArgs = allArgs.concat(moreStaticArguments);
         return new Descriptor<T>(this._ctor, ...allArgs);
+    }
+
+    _validate(type: T): void {
+        if (!type) {
+            throw new Error("can not be falsy");
+        }
     }
 }
 

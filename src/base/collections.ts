@@ -24,10 +24,6 @@ export function createStringDictionary<V>(): IStringDictionary<V> {
     return Object.create(null);
 }
 
-export function createNumberDictionary<V>(): INumberDictionary<V> {
-    return Object.create(null);
-}
-
 /**
  * Looks up and returns a property that is owned
  * by the provided map object.
@@ -136,14 +132,4 @@ export function remove(from: any, key: string): boolean {
     }
     delete from[key];
     return true;
-}
-
-/**
- * Groups the collection into a dictionary based on the provided
- * group function.
- */
-export function groupBy<T>(data: T[], groupFn: (element: T) => string): IStringDictionary<T[]> {
-    const result = createStringDictionary<T[]>();
-    data.forEach(element => lookupOrInsert(result, groupFn(element), []).push(element));
-    return result;
 }
