@@ -10,7 +10,7 @@
   "scripts": {
     "compile": "tsc --project tsconfig.json",
     "test": "npm run compile && mocha --require ts-node/register -u tdd test/**/*.test.ts",
-    "prepublishOnly": "npm run clean && npm run test"
+    "prepublishOnly": "npm run test"
   },
   "devDependencies": {
     "@types/mocha": "^7.0.1",
