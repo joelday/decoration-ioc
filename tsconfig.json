@@ -4,15 +4,9 @@
         "target": "es6",
         "outDir": "lib",
         "declaration": true,
-        "experimentalDecorators": true,
-        "skipLibCheck": true,
-        "allowJs": false
+        "experimentalDecorators": true
     },
     "include": [
         "src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules",
-        "lib"
     ]
 }
