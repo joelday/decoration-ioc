@@ -2,71 +2,35 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-"use strict";
 
-import { binarySearch } from "./base/arrays";
-import { ServiceIdentifier } from "./instantiation";
-import { Descriptor } from "./descriptors";
-
-type Entry = [ServiceIdentifier<any>, any];
+import { ServiceIdentifier } from './instantiation';
+import { Descriptor } from './descriptors';
 
 export class ServiceCollection {
 
-    private _entries: Entry[] = [];
+	private _entries = new Map<ServiceIdentifier<any>, any>();
 
-    constructor(...entries:[ServiceIdentifier<any>, any][]) {
-        for (const entry of entries) {
-            this.set(entry[0], entry[1]);
-        }
-    }
+	constructor(...entries: [ServiceIdentifier<any>, any][]) {
+		for (let [id, service] of entries) {
+			this.set(id, service);
+		}
+	}
 
-    set<T>(id: ServiceIdentifier<T>, instanceOrDescriptor: T | Descriptor<T>): T | Descriptor<T> {
-        const entry: Entry = [id, instanceOrDescriptor];
-        const idx = binarySearch(this._entries, entry, ServiceCollection._entryCompare);
-        if (idx < 0) {
-            // new element
-            this._entries.splice(~idx, 0, entry);
-        } else {
-            const old = this._entries[idx];
-            this._entries[idx] = entry;
-            return old[1];
-        }
-    }
+	set<T>(id: ServiceIdentifier<T>, instanceOrDescriptor: T | Descriptor<T>): T | Descriptor<T> {
+		const result = this._entries.get(id);
+		this._entries.set(id, instanceOrDescriptor);
+		return result;
+	}
 
-    forEach(callback: (id: ServiceIdentifier<any>, instanceOrDescriptor: any) => any): void {
-        for (const entry of this._entries) {
-            const [id, instanceOrDescriptor] = entry;
-            callback(id, instanceOrDescriptor);
-        }
-    }
+	forEach(callback: (id: ServiceIdentifier<any>, instanceOrDescriptor: any) => any): void {
+		this._entries.forEach((value, key) => callback(key, value));
+	}
 
-    has(id: ServiceIdentifier<any>): boolean {
-        return binarySearch(this._entries, ServiceCollection._searchEntry(id), ServiceCollection._entryCompare) >= 0;
-    }
+	has(id: ServiceIdentifier<any>): boolean {
+		return this._entries.has(id);
+	}
 
-    get<T>(id: ServiceIdentifier<T>): T | Descriptor<T> {
-        const idx = binarySearch(this._entries, ServiceCollection._searchEntry(id), ServiceCollection._entryCompare);
-        if (idx >= 0) {
-            return this._entries[idx][1];
-        }
-    }
-
-    private static _dummy: Entry = [undefined, undefined];
-
-    private static _searchEntry(id: ServiceIdentifier<any>): Entry {
-        ServiceCollection._dummy[0] = id;
-        return ServiceCollection._dummy;
-    }
-
-    private static _entryCompare(a: Entry, b: Entry): number {
-        const _a = a[0].toString();
-        const _b = b[0].toString();
-        if (_a < _b) {
-            return -1;
-        } else if (_a > _b) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
+	get<T>(id: ServiceIdentifier<T>): T | Descriptor<T> {
+		return this._entries.get(id);
+	}
 }

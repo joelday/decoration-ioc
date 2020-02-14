@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/joelday/decoration-ioc.svg?branch=master)](https://travis-ci.org/joelday/decoration-ioc)
 [![npm version](https://badge.fury.io/js/decoration-ioc.svg)](https://badge.fury.io/js/decoration-ioc)
-[![dependencies Status](https://david-dm.org/joelday/decoration-ioc/status.svg)](https://david-dm.org/joelday/decoration-ioc)
 
 # The instantiation system used in Visual Studio Code
 decoration-ioc is a TypeScript inversion of control and dependency injection framework. Based on the system used in Visual Studio Code, decoration-ioc provides service location and constructor injection with automatic dependency resolution.
@@ -8,13 +7,15 @@ decoration-ioc is a TypeScript inversion of control and dependency injection fra
 This package is based on source from [Microsoft/vscode](https://github.com/Microsoft/vscode) with minor modifications.
 
 # Quickstart
-The ```experimentalDecorators``` TypeScript compiler option must be set to ```true```.
+The `experimentalDecorators` TypeScript compiler option must be set to `true`.
 
 ## Define a service interface
 
 ```typescript
 // Define the service
 export interface IMyService {
+    _serviceBrand: undefined;
+
     sayHello(): string;
 }
 
@@ -26,13 +27,15 @@ export const IMyService = createDecorator<IMyService>('myService');
 ## Create a concrete implementation
 ```typescript
 export class MyService implements IMyService {
+    _serviceBrand: undefined;
+
     sayHello() {
         return 'Hello!';
     }
 }
 ```
 
-## Register a concrete type for the service
+## Register the concrete type for the service
 ```typescript
 // Create a service collection where concrete implementation types are registered
 const serviceCollection = new ServiceCollection();
@@ -45,7 +48,7 @@ serviceCollection.set(IMyService, new Descriptor(MyService));
 ```typescript
 // Create an instantiation service that performs constructor injection
 // It uses the service collection to resolve dependencies and create instances
-const instantiationService: IInstantiationService = new InstantiationService(serviceCollection);
+const instantiationService = new InstantiationService(serviceCollection);
 
 // This is a class that requires an instance of IMyService when created
 export class MyDependentClass {
