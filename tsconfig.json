@@ -5,12 +5,14 @@
         "outDir": "lib",
         "declaration": true,
         "experimentalDecorators": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "allowJs": false
     },
     "include": [
         "src/**/*.ts"
     ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "lib"
     ]
 }
