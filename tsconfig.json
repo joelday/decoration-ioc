@@ -1,17 +1,12 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": false,
+        "target": "es6",
         "outDir": "lib",
         "declaration": true,
-        "experimentalDecorators": true,
-        "noUnusedParameters": true,
-        "noUnusedLocals": true
+        "experimentalDecorators": true
     },
-    "exclude": [
-        "node_modules",
-        "lib",
-        "test"
+    "include": [
+        "src/**/*.ts"
     ]
 }

@@ -13,18 +13,6 @@ export interface IStringDictionary<V> {
 }
 
 /**
- * An interface for a JavaScript object that
- * acts a dictionary. The keys are numbers.
- */
-export interface INumberDictionary<V> {
-    [idx: number]: V;
-}
-
-export function createStringDictionary<V>(): IStringDictionary<V> {
-    return Object.create(null);
-}
-
-/**
  * Looks up and returns a property that is owned
  * by the provided map object.
  * @param what The key.
@@ -33,44 +21,12 @@ export function createStringDictionary<V>(): IStringDictionary<V> {
  *     the key isn"t found.
  */
 export function lookup<T>(from: IStringDictionary<T>, what: string, alternate?: T): T;
-export function lookup<T>(from: INumberDictionary<T>, what: number, alternate?: T): T;
 export function lookup<T>(from: any, what: any, alternate: T = null): T {
     const key = String(what);
     if (contains(from, key)) {
         return from[key];
     }
     return alternate;
-}
-
-
-/**
- * Looks up a value from the set. If the set doesn"t contain the
- * value it inserts and returns the given alternate value.
- */
-export function lookupOrInsert<T>(from: IStringDictionary<T>, key: string, alternate: T): T;
-export function lookupOrInsert<T>(from: IStringDictionary<T>, key: string, alternateFn: () => T): T;
-export function lookupOrInsert<T>(from: INumberDictionary<T>, key: number, alternate: T): T;
-export function lookupOrInsert<T>(from: INumberDictionary<T>, key: number, alternateFn: () => T): T;
-export function lookupOrInsert<T>(from: any, stringOrNumber: any, alternate: any): T {
-    const key = String(stringOrNumber);
-    if (contains(from, key)) {
-        return from[key];
-    } else {
-        if (typeof alternate === "function") {
-            alternate = alternate();
-        }
-        from[key] = alternate;
-        return alternate;
-    }
-}
-
-/**
- * Inserts
- */
-export function insert<T>(into: IStringDictionary<T>, data: T, hashFn: (data: T) => string): void;
-export function insert<T>(into: INumberDictionary<T>, data: T, hashFn: (data: T) => string): void;
-export function insert<T>(into: any, data: T, hashFn: (data: T) => string): void {
-    into[hashFn(data)] = data;
 }
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -80,25 +36,8 @@ const hasOwnProperty = Object.prototype.hasOwnProperty;
  * with the given name.
  */
 export function contains<T>(from: IStringDictionary<T>, what: string): boolean;
-export function contains<T>(from: INumberDictionary<T>, what: number): boolean;
 export function contains(from: any, what: any): boolean {
     return hasOwnProperty.call(from, what);
-}
-
-/**
- * Returns an array which contains all values that reside
- * in the given set.
- */
-export function values<T>(from: IStringDictionary<T>): T[];
-export function values<T>(from: INumberDictionary<T>): T[];
-export function values<T>(from: any): any[] {
-    const result: T[] = [];
-    for (const key in from) {
-        if (hasOwnProperty.call(from, key)) {
-            result.push(from[key]);
-        }
-    }
-    return result;
 }
 
 /**
@@ -106,7 +45,6 @@ export function values<T>(from: any): any[] {
  * to remove elements and will stop when the callback returns {{false}}.
  */
 export function forEach<T>(from: IStringDictionary<T>, callback: (entry: { key: string; value: T; }, remove: Function) => any): void;
-export function forEach<T>(from: INumberDictionary<T>, callback: (entry: { key: number; value: T; }, remove: Function) => any): void;
 export function forEach<T>(from: any, callback: (entry: { key: any; value: T; }, remove: Function) => any): void {
     for (const key in from) {
         if (hasOwnProperty.call(from, key)) {
@@ -118,18 +56,4 @@ export function forEach<T>(from: any, callback: (entry: { key: any; value: T; },
             }
         }
     }
-}
-
-/**
- * Removes an element from the dictionary. Returns {{false}} if the property
- * does not exists.
- */
-export function remove<T>(from: IStringDictionary<T>, key: string): boolean;
-export function remove<T>(from: INumberDictionary<T>, key: string): boolean;
-export function remove(from: any, key: string): boolean {
-    if (!hasOwnProperty.call(from, key)) {
-        return false;
-    }
-    delete from[key];
-    return true;
 }

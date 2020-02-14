@@ -1,9 +1,10 @@
 {
+    "extends": "../tsconfig.json",
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "noImplicitAny": false,
-        "inlineSourceMap": true,
-        "experimentalDecorators": true
-    }
+        "noEmit": true
+    },
+    "include": [
+        "../src/**/*.ts",
+        "./**/*.ts"
+    ]
 }

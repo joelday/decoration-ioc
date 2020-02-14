@@ -5,7 +5,7 @@ import * as instantiationService from "./instantiationService";
 import { Descriptor } from "./descriptors";
 import { createDecorator, IInstantiationService, optional, ServicesAccessor } from "./instantiation";
 import { ServiceCollection } from "./serviceCollection";
-import { registerSingleton, getServices } from "./extensions";
+import { registerSingleton, getSingletonServiceDescriptors } from "./extensions";
 
 export const InstantiationService: {
     new (services?: ServiceCollection, strict?: boolean): IInstantiationService;
@@ -19,5 +19,5 @@ export {
     ServiceCollection,
     ServicesAccessor,
     registerSingleton,
-    getServices
+    getSingletonServiceDescriptors
 };
