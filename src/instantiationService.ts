@@ -11,7 +11,13 @@ import { ServiceCollection } from './serviceCollection';
 import { IdleValue } from './base/async';
 
 // TRACING
-const _enableTracing = false;
+let _enableTracing = false;
+let _logFunction: (msg: string) => void;
+
+export function setTracingEnabled(enabled: boolean, logFunction?: (msg: string) => void): void {
+	_enableTracing = enabled;
+	_logFunction = logFunction ?? ((msg: string) => console.log(msg));
+}
 
 // PROXY
 declare const Proxy: any;
@@ -24,6 +30,9 @@ class CyclicDependencyError extends Error {
 	}
 }
 
+/**
+ * @internal
+ */
 export class InstantiationService implements IInstantiationService {
 
 	_serviceBrand: undefined;
@@ -309,7 +318,7 @@ class Trace {
 		];
 
 		if (dur > 2 || causedCreation) {
-			console.log(lines.join('\n'));
+			_logFunction(lines.join('\n'));
 		}
 	}
 }

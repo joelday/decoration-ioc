@@ -4,10 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as assert from 'assert';
-import { createDecorator, optional, ServicesAccessor } from '../src/instantiation';
-import { InstantiationService } from '../src/instantiationService';
-import { ServiceCollection } from '../src/serviceCollection';
-import { Descriptor } from '../src/descriptors';
+import { createDecorator, optional, ServicesAccessor, InstantiationService, ServiceCollection, Descriptor, setTracingEnabled } from '../src';
 
 let IService1 = createDecorator<IService1>('service1');
 
@@ -391,5 +388,30 @@ suite('Instantiation Service', () => {
 		child.createInstance(Service1Consumer);
 
 		assert.equal(serviceInstanceCount, 1);
+	});
+
+	test('Tracing', function () {
+		try {
+			let producedTracing = false;
+			setTracingEnabled(true, (msg: string) => {
+				producedTracing = true;
+				assert.ok(typeof msg === 'string');
+				console.log('Tracing', msg);
+			});
+
+			let collection = new ServiceCollection();
+			let service = new InstantiationService(collection);
+			collection.set(IService1, new Descriptor<IService1>(Service1));
+			collection.set(IDependentService, new Descriptor<IDependentService>(DependentService));
+	
+			service.invokeFunction(accessor => {
+				accessor.get(IDependentService);
+			});
+
+			assert.ok(producedTracing);
+		}
+		finally {
+			setTracingEnabled(false);
+		}
 	});
 });

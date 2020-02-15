@@ -87,7 +87,7 @@ export class Graph<T> {
         return node;
     }
 
-    lookup(data: T): Node<T> {
+    lookup(data: T): Node<T> | null {
         return lookup(this._nodes, this._hashFn(data));
     }
 

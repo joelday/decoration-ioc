@@ -8,6 +8,9 @@ import * as descriptors from './descriptors';
 
 // ------ internal util
 
+/**
+ * @internal
+ */
 export namespace _util {
 
 	export const serviceIds = new Map<string, ServiceIdentifier<any>>();

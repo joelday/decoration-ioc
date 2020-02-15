@@ -20,8 +20,8 @@ export interface IStringDictionary<V> {
  * @param alternate A default value this is return in case an item with
  *     the key isn"t found.
  */
-export function lookup<T>(from: IStringDictionary<T>, what: string, alternate?: T): T;
-export function lookup<T>(from: any, what: any, alternate: T = null): T {
+export function lookup<T>(from: IStringDictionary<T>, what: string, alternate?: T): T | null;
+export function lookup<T>(from: any, what: any, alternate: T | null = null): T | null {
     const key = String(what);
     if (contains(from, key)) {
         return from[key];

@@ -18,7 +18,7 @@ export class Descriptor<T> {
 	}
 }
 
-export interface CreateSyncFunc {
+export interface CreateFunc {
 
 	<T>(ctor: instantiation.IConstructorSignature0<T>): Descriptor0<T>;
 
@@ -74,7 +74,8 @@ export interface CreateSyncFunc {
 	<A1, A2, A3, A4, A5, A6, A7, A8, T>(ctor: instantiation.IConstructorSignature8<A1, A2, A3, A4, A5, A6, A7, A8, T>, a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7): Descriptor1<A8, T>;
 	<A1, A2, A3, A4, A5, A6, A7, A8, T>(ctor: instantiation.IConstructorSignature8<A1, A2, A3, A4, A5, A6, A7, A8, T>, a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7, a8: A8): Descriptor0<T>;
 }
-export const createDescriptor: CreateSyncFunc = <T>(ctor: any, ...staticArguments: any[]): any => {
+
+export const createDescriptor: CreateFunc = <T>(ctor: any, ...staticArguments: any[]): any => {
 	return new Descriptor<T>(ctor, staticArguments);
 };
 
